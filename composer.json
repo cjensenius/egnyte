@@ -1,5 +1,5 @@
 {
-	"name": "yespbs/egnyte",
+	"name": "cjensenius/egnyte",
 	"description": "Manage Egnyte uploads with the Egnyte public API",
 	"type": "package",
 	"authors": [
