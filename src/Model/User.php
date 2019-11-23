@@ -32,4 +32,14 @@ class User
     {
         return $this->request->get('/users/'.$id);
     }
+
+    /**
+     * Gets all users
+     *
+     * @return Egnyte\Http\Response Response object
+     */
+    public function getUsers()
+    {
+        return $this->request->get('/users');
+    }
 }
