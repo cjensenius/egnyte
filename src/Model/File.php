@@ -228,7 +228,7 @@ class File
             'list_content' => $recursive
         ];
 
-        return $this->request->get('/fs/ids/'.$id, $params);
+        return $this->request->get('/fs/ids/folder/'.$id, $params);
     }
 
     /**
