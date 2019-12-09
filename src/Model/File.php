@@ -15,7 +15,7 @@ class File
     {
         if( ! $client ){
             $client = new Client( $domain, $oauth_token, $ssl );
-        }   
+        }
 
         $this->request = $client->request;
         $this->curl = $client->curl;
@@ -31,7 +31,7 @@ class File
     public function getMetadata($path, $params = [])
     {
         $path = Request::pathEncode($path);
-        
+
         if (!empty($params)) {
             $path .= '?' . http_build_query($params);
         }
@@ -98,7 +98,7 @@ class File
      * @param string $file_contents Binary contents of the file
      *
      * @return Egnyte\Http\Response Response object
-     * 
+     *
      * @todo
      */
     public function uploadChunked($remote_path, $file_contents, $file_name=null)
@@ -178,7 +178,7 @@ class File
 
     /**
      * Download file from Egnyte.
-     * 
+     *
      * @param  string $path   Remote file path
      * @param  string $output Local output directory and file name
      * @return bool
@@ -212,6 +212,23 @@ class File
         ];
 
         return $this->request->get('/fs'.Request::pathEncode($path), $params);
+    }
+
+    /**
+     * List a file/directory by id.
+     *
+     * @param string $id     The id of the remote file/directory
+     * @param bool $recursive  List recursive for folder, all versions for file
+     *
+     * @return Egnyte\Http\Response Response object
+     */
+    public function listFolderById($id, $recursive=false)
+    {
+        $params = [
+            'list_content' => $recursive
+        ];
+
+        return $this->request->get('/fs/ids/'.$id, $params);
     }
 
     /**
