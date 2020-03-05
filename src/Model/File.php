@@ -198,6 +198,27 @@ class File
     }
 
     /**
+     * Download file from Egnyte by ID.
+     *
+     * @param  string $id   the... id 
+     * @param  string $output Local output directory and file name
+     * @return bool
+     */
+    public function downloadById($id, $output=null)
+    {
+        // path names are passed in the URL, so they need encoding
+        $path = Request::pathEncode($path);
+
+        $response = $this->request->get('/fs-content/ids/file/'.$id);
+
+        if( $output ){
+            return file_put_contents($output, $response->body);
+        }
+
+        return $response->body;
+    }
+
+    /**
      * List a file/directory.
      *
      * @param string $path     The full path to the remote file/directory
@@ -215,6 +236,32 @@ class File
     }
 
     /**
+     * List a file by id.
+     *
+     * @param string $id     The id of the remote file
+     * @param bool $recursive  List recursive for all versions for file
+     *
+     * @return Egnyte\Http\Response Response object
+     */
+    public function listFileById($id, $recursive=false)
+    {
+        return $this->listById($id, false, $recursive);
+    }
+
+    /**
+     * List a directory by id.
+     *
+     * @param string $id     The id of the remote directory
+     * @param bool $recursive  List recursive for folder
+     *
+     * @return Egnyte\Http\Response Response object
+     */
+    public function listFolderById($id, $recursive=false)
+    {
+        return $this->listById($id, true, $recursive);
+    }   
+    
+    /**
      * List a file/directory by id.
      *
      * @param string $id     The id of the remote file/directory
@@ -222,13 +269,13 @@ class File
      *
      * @return Egnyte\Http\Response Response object
      */
-    public function listFolderById($id, $recursive=false)
+    public function listById($id, $folder = true, $recursive=false)
     {
         $params = [
             'list_content' => $recursive
         ];
-
-        return $this->request->get('/fs/ids/folder/'.$id, $params);
+        $type = ($folder) ? 'folder/' : 'file/';
+        return $this->request->get('/fs/ids/' . $type . $id, $params);
     }
 
     /**
